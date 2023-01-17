@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EpicLoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/epic', function () {
-    return view('epic');
-});
+Route::get('/epic', EpicLoginController::class);

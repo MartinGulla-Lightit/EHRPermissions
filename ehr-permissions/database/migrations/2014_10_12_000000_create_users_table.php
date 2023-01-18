@@ -20,9 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->rememberToken();
-            $table->string('patient_id')->nullable();
-            $table->string('doctor_id')->nullable();
-            // For now i dont know if doctors and patients will have different id or are shared
+            $table->string('ehr_id')->nullable();
             $table->timestamps();
         });
     }

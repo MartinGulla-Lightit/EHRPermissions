@@ -11,8 +11,7 @@ class LoginController extends Controller
     public function __invoke(Request $request)
     {
         if (Auth::attempt($request->only('email', 'password'))) {
-            $requests = DB::table('request')->get();
-            return view('admin', ['requests' => $requests]);
+            return redirect()->route('requests');
         } else {
             return view('login');
         }

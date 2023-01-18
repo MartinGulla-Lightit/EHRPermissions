@@ -14,12 +14,22 @@
             <tbody>
                 @foreach($requests as $request)
                     <tr>
-                        <td>{{ $request->doctor_id ?? $request->patient_id }}</td>
+                        <td>{{ $request->ehr_id }}</td>
                         <td>{{ $request->name }}</td>
                         <td>{{ $request->email }}</td>
                         <td>
-                            <a>Accept</a>
-                            <a>Reject</a>
+                            <form action="/accept" method="POST">
+                                @csrf
+                                <input type="hidden" name="email" value="{{ $request->email }}">
+                                <input type="hidden" name="ehrId" value="{{ $request->ehr_id }}">
+                                <input type="hidden" name="name" value="{{ $request->name }}">
+                                <input type="submit" value="Accept">
+                            </form>
+                            <form action="/reject" method="POST">
+                                @csrf
+                                <input type="hidden" name="email" value="{{ $request->email }}">
+                                <input type="submit" value="Reject">
+                            </form>
                         </td>
                     </tr>
                 @endforeach

@@ -15,9 +15,7 @@ return new class extends Migration
     {
         Schema::create('request', function (Blueprint $table) {
             $table->id();
-            $table->string('patient_id')->nullable();
-            $table->string('doctor_id')->nullable();
-            // For now i dont know if doctors and patients will have different id or are shared
+            $table->string('ehr_id');
             $table->string('name');
             $table->string('email');
             $table->timestamps();

@@ -27,20 +27,18 @@ class EpicLoginController extends Controller
             $patient = Http::accept('application/json')
                 ->withToken($accessToken)
                 ->get("https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/Patient/" . $patient, );
-            $user = User::where('patient_id', $patient->json()['id'])->first();
+            $user = User::where('ehr_id', $patient->json()['id'])->first();
             if (!$user) {
                 $email = '';
                 $name = $patient->json()['name'][0]['text'];
-                $patientId = $patient->json()['resourceType'] == 'Patient' ? $patient->json()['id'] : null;
-                $doctorId = $patient->json()['resourceType'] == 'Doctor' ? $patient->json()['id'] : null;
+                $ehrId = $patient->json()['id'];
                 foreach ($patient->json()['telecom'] as $telecom) {
                     if ($telecom['system'] == 'email') {
                         $email = $telecom['value'];
                     }
                 }
                 DB::table('request')->insert([
-                    'patient_id' => $patientId,
-                    'doctor_id' => $doctorId,
+                    'ehr_id' => $ehrId,
                     'created_at' => now(),
                     'updated_at' => now(),
                     'name' => $name,

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('patient_id')->nullable();
             $table->string('doctor_id')->nullable();
             // For now i dont know if doctors and patients will have different id or are shared
+            $table->string('name');
+            $table->string('email');
             $table->timestamps();
         });
     }

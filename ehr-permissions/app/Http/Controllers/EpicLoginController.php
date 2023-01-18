@@ -23,19 +23,32 @@ class EpicLoginController extends Controller
         ]);
         $accessToken = $loginResponse->json()['access_token'];
         $patient = $loginResponse->json()['patient'];
-
         if ($accessToken) {
-            $patient = Http::withToken($accessToken)->get("https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/Patient/" . $patient);
+            $patient = Http::accept('application/json')
+                ->withToken($accessToken)
+                ->get("https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/Patient/" . $patient, );
             $user = User::where('patient_id', $patient->json()['id'])->first();
             if (!$user) {
+                $email = '';
+                $name = $patient->json()['name'][0]['text'];
+                $patientId = $patient->json()['resourceType'] == 'Patient' ? $patient->json()['id'] : null;
+                $doctorId = $patient->json()['resourceType'] == 'Doctor' ? $patient->json()['id'] : null;
+                foreach ($patient->json()['telecom'] as $telecom) {
+                    if ($telecom['system'] == 'email') {
+                        $email = $telecom['value'];
+                    }
+                }
                 DB::table('request')->insert([
-                    'patient_id' => $patient->json()['id'],
+                    'patient_id' => $patientId,
+                    'doctor_id' => $doctorId,
                     'created_at' => now(),
-                    'updated_at' => now()
+                    'updated_at' => now(),
+                    'name' => $name,
+                    'email' => $email
                 ]);
                 return view('request');
             } else {
-                return view('user');
+                return view('user', ['user' => $user]);
             }
         }
     }

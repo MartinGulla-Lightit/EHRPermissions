@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AcceptRequestController;
+use App\Http\Controllers\AllscriptLoginController;
+use App\Http\Controllers\AthenaLoginController;
 use App\Http\Controllers\EpicLoginController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RejectRequestController;
@@ -23,6 +25,10 @@ Route::get('/', function () {
 });
 
 Route::get('/epic', EpicLoginController::class);
+
+Route::get('/athena', AthenaLoginController::class);
+
+Route::get('/allscript', AllscriptLoginController::class);
 
 Route::get('/admin', function () {
     return view('login');
